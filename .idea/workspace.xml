@@ -4,71 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2776e0da-be81-4604-ab2e-48583ebce21b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ai/analyzer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ai/embeddings.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ai/ollama_client.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ai/prompt_engine.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ai/summarizer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/local_api.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/websocket_server.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/agent.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/executor.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/logger.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/memory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/parser.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/planner.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/reasoning.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/session.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/utils.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/graph/attack_graph.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/graph/relationship_mapper.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/graph/visualizer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ml/anomaly_detector.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ml/dataset_builder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ml/datasets/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ml/feature_extractor.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ml/model_loader.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ml/predictor.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ml/train_models/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ml/trainer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pipelines/api_hunting.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pipelines/bug_bounty_mode.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pipelines/full_recon.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pipelines/js_recon.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pipelines/passive_recon.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/installed/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/loader.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plugins/manager.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/prompts/planner_prompt.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/prompts/prioritization.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/prompts/reasoning_prompt.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/prompts/recon_prompt.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/prompts/vuln_analysis.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_agent.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_ml.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_tool.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/base_tool.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/intel/fingerprint.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/intel/headers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/intel/tech_detector.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/recon/assetfinder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/recon/gau.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/recon/httpx.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/recon/katana.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/recon/subfinder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/recon/waybackurls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scanning/fuff.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scanning/nikto.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scanning/nmap.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/scanning/nuclei.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/web/api_mapper.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/web/graphql_detector.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/web/js_analyzer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/web/param_miner.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/GlitchReconAI.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GlitchReconAI.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="2776e0da-be81-4604-ab2e-48583ebce21b" name="Changes" comment="adding a file" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -98,23 +34,23 @@
 }]]></component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.0" />
-      <entry key="S5" value="1.0000000000108311" />
-      <entry key="S10" value="1.0000038418947184" />
-      <entry key="S30" value="1.0232575486702122" />
-      <entry key="S60" value="1.2136429917054363" />
-      <entry key="M2" value="1.6585898161450263" />
-      <entry key="M5" value="2.6629543349605793" />
-      <entry key="M10" value="4.192657545531361" />
-      <entry key="M15" value="5.312190027572648" />
-      <entry key="M30" value="7.095342167764834" />
-      <entry key="H1" value="8.367918849512339" />
-      <entry key="H2" value="9.132783674318967" />
-      <entry key="H4" value="9.552718746084526" />
-      <entry key="D1" value="9.92347429407984" />
-      <entry key="W1" value="9.989018217865057" />
+      <entry key="MS100" value="1.0000000384434464" />
+      <entry key="MS500" value="1.0583528849797295" />
+      <entry key="S2" value="2.0838609730582087" />
+      <entry key="S5" value="2.990483944365755" />
+      <entry key="S10" value="3.442409042887395" />
+      <entry key="S30" value="3.800941541984309" />
+      <entry key="S60" value="3.898800958643438" />
+      <entry key="M2" value="3.962370638777277" />
+      <entry key="M5" value="4.367632792527648" />
+      <entry key="M10" value="5.590452124615814" />
+      <entry key="M15" value="6.788863524387772" />
+      <entry key="M30" value="9.143918843152054" />
+      <entry key="H1" value="11.125544990613161" />
+      <entry key="H2" value="12.427748366740516" />
+      <entry key="H4" value="13.176625102409371" />
+      <entry key="D1" value="13.857269922381345" />
+      <entry key="W1" value="13.97947077582804" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -136,23 +72,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.5153388907425463E-5" />
-      <entry key="MS500" value="0.10866807001125271" />
-      <entry key="S2" value="0.5741501577314871" />
-      <entry key="S5" value="0.8009588334322009" />
-      <entry key="S10" value="0.8949668749648172" />
-      <entry key="S30" value="0.9869391769992082" />
-      <entry key="S60" value="1.1953026979419068" />
-      <entry key="M2" value="1.6493617479124392" />
-      <entry key="M5" value="2.6592239206159447" />
-      <entry key="M10" value="4.190734678201506" />
-      <entry key="M15" value="5.310870129767042" />
-      <entry key="M30" value="7.0946467029831926" />
-      <entry key="H1" value="8.367557016285037" />
-      <entry key="H2" value="9.132598294952953" />
-      <entry key="H4" value="9.55262479970073" />
-      <entry key="D1" value="9.923458448544576" />
-      <entry key="W1" value="9.989015949435489" />
+      <entry key="MS100" value="0.9659363663002066" />
+      <entry key="MS500" value="1.05108700186902" />
+      <entry key="S2" value="2.0803999010668632" />
+      <entry key="S5" value="2.9885101491289676" />
+      <entry key="S10" value="3.441274579013178" />
+      <entry key="S30" value="3.800524284671925" />
+      <entry key="S60" value="3.8985857856368114" />
+      <entry key="M2" value="3.962187422071414" />
+      <entry key="M5" value="4.367045341027179" />
+      <entry key="M10" value="5.589696087533098" />
+      <entry key="M15" value="6.788154273621276" />
+      <entry key="M30" value="9.143407004341299" />
+      <entry key="H1" value="11.12523314731478" />
+      <entry key="H2" value="12.427575452165465" />
+      <entry key="H4" value="13.176533936030545" />
+      <entry key="D1" value="13.857254030019654" />
+      <entry key="W1" value="13.9794684877889" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo"><![CDATA[{
@@ -200,8 +136,17 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1779900711027</updated>
-      <workItem from="1779900712029" duration="3033000" />
+      <workItem from="1779900712029" duration="3260000" />
     </task>
+    <task id="LOCAL-00001" summary="adding a file">
+      <option name="closed" value="true" />
+      <created>1779903842280</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1779903842280</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -217,5 +162,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="adding a file" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding a file" />
   </component>
 </project>
