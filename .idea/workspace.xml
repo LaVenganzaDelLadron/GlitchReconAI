@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2776e0da-be81-4604-ab2e-48583ebce21b" name="Changes" comment="adding a file" />
+    <list default="true" id="2776e0da-be81-4604-ab2e-48583ebce21b" name="Changes" comment="adding a file">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai/ollama_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai/ollama_client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/recon/subfinder.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/recon/subfinder.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,18 +24,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "LaVenganzaDelLadron"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;LaVenganzaDelLadron&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/LaVenganzaDelLadron/GlitchReconAI.git",
-    "accountId": "ab93fa26-b44b-43ad-a923-c376aede1b1b"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/LaVenganzaDelLadron/GlitchReconAI.git&quot;,
+    &quot;accountId&quot;: &quot;ab93fa26-b44b-43ad-a923-c376aede1b1b&quot;
   }
-}]]></component>
+}</component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
       <entry key="MS100" value="1.0000000384434464" />
@@ -91,10 +95,10 @@
       <entry key="W1" value="13.9794684877889" />
     </decayedShown>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8,
-  "fromUser": false
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8,
+  &quot;fromUser&quot;: false
+}</component>
   <component name="ProjectId" id="3EJdffA5mWiC49zTLDhEGzent9k" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -107,6 +111,7 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
@@ -118,6 +123,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
@@ -137,6 +143,8 @@
       <option name="presentableId" value="Default" />
       <updated>1779900711027</updated>
       <workItem from="1779900712029" duration="3260000" />
+      <workItem from="1779994993747" duration="121000" />
+      <workItem from="1779998323333" duration="120000" />
     </task>
     <task id="LOCAL-00001" summary="adding a file">
       <option name="closed" value="true" />
