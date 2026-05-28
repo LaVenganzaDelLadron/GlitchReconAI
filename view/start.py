@@ -1,4 +1,6 @@
 import os
+from core.agent import scan_target
+
 
 def banner():
     os.system('figlet -c -f slant "GlitchReconAI" | lolcat')
@@ -37,13 +39,8 @@ def menu():
 def startProject():
     print("\n[+] Starting GlitchReconAI...\n")
     print("============Create Penetration Testing Project============")
-    project_name = input("[+] Enter project name: ")
-    target_name = input("[+] Enter target name: ")
-    description = input("[+] Enter project description: ")
-
-    print("\n[+] Project created successfully!")
-    print(f"Project Name: {project_name}")
-    print(f"Target Name: {target_name}")
+    target = input("\n[+] Enter the target domain: ")
+    scan_target(target)
 
     
 
