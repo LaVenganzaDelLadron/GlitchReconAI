@@ -1,5 +1,5 @@
 
-def build_recon_prompt(data: str) -> str:
+def build_subfinder_prompt(data: str) -> str:
     return f"""
     You are an offline cybersecurity data parser.
 
@@ -21,4 +21,31 @@ def build_recon_prompt(data: str) -> str:
     - Be cautious
     - No exploitation instructions
     - No false vulnerability claims
+    """
+
+
+def build_katana_prompt(data: str) -> str:
+    return f"""
+    You are an offline cybersecurity reconnaissance analyst.
+
+    You are analyzing pre-collected Katana web crawler output.
+    This data is for authorized passive reconnaissance only.
+    Do NOT provide exploitation steps, payloads, vulnerability confirmation, or attack instructions.
+
+    DATA:
+    {data}
+
+    TASK:
+    1. Summary of discovered web surface
+    2. Notable URL and endpoint patterns
+    3. JavaScript files worth reviewing manually
+    4. API-looking paths and possible application areas
+    5. Interesting paths such as login, admin, upload, or graphql
+    6. Safe follow-up review priorities
+
+    Rules:
+    - Be cautious
+    - Treat findings as leads, not confirmed vulnerabilities
+    - Suggest only passive review and inventory actions
+    - Do not include exploit commands or payloads
     """

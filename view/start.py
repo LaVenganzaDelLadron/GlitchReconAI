@@ -1,6 +1,6 @@
 import os
 
-from view.recon import start_subfinder
+from view.recon import start_recon
 
 
 def banner():
@@ -51,7 +51,7 @@ def agentMenu():
 
             if choose == 1:
                 print("\n[+] Starting Reconnaissance module...\n")
-                start_subfinder()
+                start_recon()
             elif choose == 2:
                 print("\n[+] Starting Intelligence Gathering module...\n")
             elif choose == 3:
@@ -73,7 +73,6 @@ def startProject():
     print("\n[+] Starting GlitchReconAI...\n")
     agentMenu()
     
-
 
 
 

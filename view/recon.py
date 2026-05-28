@@ -1,4 +1,21 @@
-from core.agent import subfinder_agent
+from core.agent import katana_agent, subfinder_agent
+
+
+def start_recon():
+    print("\n=== RECONNAISSANCE MODULE ===\n")
+
+    print("[1] Subfinder")
+    print("[2] Katana")
+
+    choice = input("Enter choice (1/2): ").strip()
+
+    if choice == "1":
+        start_subfinder()
+    elif choice == "2":
+        start_katana()
+    else:
+        print("Invalid choice. Please select 1 or 2.")
+
 
 def start_subfinder():
 
@@ -24,3 +41,10 @@ def start_subfinder():
 
     else:
         print("Invalid choice. Please select 1, 2, or 3.")
+
+
+def start_katana():
+    print("\n=== KATANA MODULE ===\n")
+
+    target = input("[+] Enter authorized target URL/domain: ").strip()
+    katana_agent(target)
