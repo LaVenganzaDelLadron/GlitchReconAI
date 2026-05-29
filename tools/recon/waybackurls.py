@@ -305,12 +305,9 @@ def _run_waybackurls_command(cmd: List[str]) -> str:
             timeout=WAYBACKURLS_TIMEOUT_SECONDS,
         )
     except subprocess.TimeoutExpired:
-        return (
-            "[waybackurls error] command timed out after "
-            f"{WAYBACKURLS_TIMEOUT_SECONDS} seconds."
-        )
+        return []
     except Exception as exc:
-        return f"[waybackurls error] unexpected failure: {exc}"
+        return []
 
     if result.returncode != 0:
         error_detail = (
@@ -318,14 +315,14 @@ def _run_waybackurls_command(cmd: List[str]) -> str:
             or result.stdout.strip()
             or "waybackurls exited with a non-zero status."
         )
-        return f"[waybackurls error] {error_detail}"
+        return []
 
     return result.stdout.strip()
 
 
 def _validate_target(target: Optional[str]) -> Optional[str]:
     if not isinstance(target, str) or not target.strip():
-        return "Invalid target provided."
+        return []
 
     return None
 

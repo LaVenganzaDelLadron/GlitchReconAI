@@ -1,6 +1,7 @@
 import requests
 
-def generate_response(prompt: str) -> str:
+
+def generate_response(prompt: str, dashboard=None) -> str:
     OLLAMA_URL = 'http://localhost:11434/api/generate'
 
     response = requests.post(
@@ -11,4 +12,9 @@ def generate_response(prompt: str) -> str:
             'stream': False,
             }
         )
-    return response.json()['response']
+    ai_response = response.json()['response']
+
+    if dashboard is not None:
+        dashboard.ai_output(ai_response)
+
+    return ai_response

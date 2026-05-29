@@ -181,10 +181,10 @@ def run_katana(target: str, depth: int = 4, js_crawl: bool = True) -> str:
         return validation_error
 
     if not isinstance(depth, int) or depth < 1:
-        return "[katana error] depth must be a positive integer."
+        return []
 
     if not shutil.which("katana"):
-        return "[katana error] katana is not installed or not in PATH."
+        return []
 
     cmd = ["katana", "-u", target.strip(), "-d", str(depth), "-silent"]
     if js_crawl:
@@ -211,7 +211,7 @@ def run_katana_advanced(target: str) -> Dict[str, object]:
         return result
 
     if not shutil.which("katana"):
-        result["raw_output"] = "[katana error] katana is not installed or not in PATH."
+        result["raw_output"] = []
         return result
 
     cmd = [
@@ -286,13 +286,13 @@ def _run_katana_command(cmd: List[str]) -> str:
             timeout=KATANA_TIMEOUT_SECONDS,
         )
     except subprocess.TimeoutExpired:
-        return f"[katana error] command timed out after {KATANA_TIMEOUT_SECONDS} seconds."
+        return []
     except Exception as exc:
-        return f"[katana error] unexpected failure: {exc}"
+        return []
 
     if result.returncode != 0:
         error_detail = result.stderr.strip() or "katana exited with a non-zero status."
-        return f"[katana error] {error_detail}"
+        return []
 
     return result.stdout.strip()
 

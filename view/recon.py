@@ -1,4 +1,11 @@
-from core.agent import katana_agent, subfinder_agent, waybackurls_agent
+from core.agent import (
+    assetfinder_agent,
+    gau_agent,
+    httpx_agent,
+    katana_agent,
+    subfinder_agent,
+    waybackurls_agent,
+)
 
 
 def start_recon():
@@ -7,8 +14,11 @@ def start_recon():
     print("[1] Subfinder")
     print("[2] Katana")
     print("[3] Waybackurls")
+    print("[4] Assetfinder")
+    print("[5] GAU")
+    print("[6] httpx")
 
-    choice = input("Enter choice (1/2/3): ").strip()
+    choice = input("Enter choice (1/2/3/4/5/6): ").strip()
 
     if choice == "1":
         start_subfinder()
@@ -16,8 +26,14 @@ def start_recon():
         start_katana()
     elif choice == "3":
         start_waybackurls()
+    elif choice == "4":
+        start_assetfinder()
+    elif choice == "5":
+        start_gau()
+    elif choice == "6":
+        start_httpx()
     else:
-        print("Invalid choice. Please select 1, 2, or 3.")
+        print("Invalid choice. Please select 1, 2, 3, 4, 5, or 6.")
 
 
 def start_subfinder():
@@ -58,3 +74,24 @@ def start_waybackurls():
 
     target = input("[+] Enter authorized target URL/domain: ").strip()
     waybackurls_agent(target)
+
+
+def start_assetfinder():
+    print("\n=== ASSETFINDER MODULE ===\n")
+
+    target = input("[+] Enter authorized target domain: ").strip()
+    assetfinder_agent(target)
+
+
+def start_gau():
+    print("\n=== GAU MODULE ===\n")
+
+    target = input("[+] Enter authorized target domain: ").strip()
+    gau_agent(target)
+
+
+def start_httpx():
+    print("\n=== HTTPX MODULE ===\n")
+
+    targets_file = input("[+] Enter target list file path: ").strip()
+    httpx_agent(targets_file)
