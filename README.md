@@ -27,13 +27,41 @@ This project is intended for analyzing collected reconnaissance output. It does 
 
 ## Requirements
 
+The recon tools are lightweight. The heavy part is local AI analysis through Ollama, especially on laptops with limited RAM or unsupported AMD Radeon GPU acceleration.
+
+### Minimum: CLI recon only
+
 - Python 3
+- 4GB RAM
 - `requests` Python package
 - `figlet` and `lolcat` for banner output
-- `subfinder` installed and available in your `PATH`
-- `katana` installed and available in your `PATH`
+- Internet access for passive recon tool queries
+- `subfinder`, `katana`, and `waybackurls` installed as needed and available in your `PATH`
+
+### Minimum: CLI + local AI
+
+- 8GB RAM
+- 4-core CPU
 - Ollama running locally at `http://localhost:11434`
-- Recommended Ollama model: `qwen2.5:7b`
+- Smaller Ollama model such as `qwen2.5:1.5b` or `qwen2.5:3b`
+- SSD storage with several GB free for downloaded models
+
+### Recommended: smooth local AI
+
+- 16GB RAM or more
+- 6GB to 8GB VRAM for 7B-class models when GPU acceleration works
+- SSD storage with several GB free for models and cache files
+- Recommended model for better analysis quality: `qwen2.5:7b`
+
+`qwen2.5:7b` is about 4.7GB as an Ollama model download and may need substantially more memory while running. It can be too heavy for low-end laptops, especially if Ollama falls back to CPU.
+
+### AMD Radeon notes
+
+- AMD acceleration depends on your exact GPU model, operating system, driver, and Ollama backend support.
+- On Linux, Ollama AMD GPU acceleration depends on compatible ROCm support and drivers.
+- On Windows, AMD support may require the AMD ROCm Ollama build.
+- Unsupported AMD Radeon GPUs may fall back to CPU, which can be slow or unstable on low-RAM laptops.
+- If Ollama crashes, freezes, or makes the laptop unusable, use a smaller model first.
 
 ## Installation
 
@@ -57,13 +85,38 @@ go install github.com/projectdiscovery/katana/cmd/katana@latest
 export PATH=$PATH:~/go/bin
 ```
 
-Install and prepare the recommended Ollama model:
+Install and prepare an Ollama model.
+
+For low-resource laptops, start small:
+
+```bash
+ollama pull qwen2.5:1.5b
+```
+
+For a better balance of quality and memory use:
+
+```bash
+ollama pull qwen2.5:3b
+```
+
+For stronger analysis on machines with enough RAM or working GPU acceleration:
 
 ```bash
 ollama pull qwen2.5:7b
 ```
 
-Make sure Ollama is running before starting the tool.
+Make sure Ollama is running before starting the tool. The current code uses the model configured in `ai/ollama_client.py`, currently `qwen2.5:7b`. If your laptop crashes or freezes, install a smaller model and change that value to `qwen2.5:1.5b` or `qwen2.5:3b`.
+
+## Low-resource laptop setup
+
+If your laptop has only 8GB RAM or an AMD Radeon GPU that Ollama does not accelerate correctly:
+
+- Start with `qwen2.5:1.5b`.
+- Try `qwen2.5:3b` if the smaller model is stable.
+- Avoid `qwen2.5:7b` until you confirm your system has enough free RAM or working GPU acceleration.
+- Close browsers, IDEs, virtual machines, and other heavy apps before AI analysis.
+- Run recon collection first, then run AI analysis after you have the output.
+- If Ollama falls back to CPU, expect slower responses and higher system memory pressure.
 
 ## Usage
 
@@ -170,9 +223,54 @@ ollama list
 ollama pull qwen2.5:7b
 ```
 
+### Ollama crashes or freezes
+
+This usually means the model is too heavy for the available RAM/VRAM, or GPU acceleration is not working.
+
+Try a smaller model:
+
+```bash
+ollama pull qwen2.5:1.5b
+ollama pull qwen2.5:3b
+```
+
+Then update the model name in `ai/ollama_client.py`.
+
+### AMD GPU is not detected
+
+AMD Radeon support depends on the exact GPU, operating system, Ollama build, and driver stack.
+
+- On Linux, check ROCm compatibility and driver installation.
+- On Windows, use the Ollama build that supports AMD ROCm if your GPU is supported.
+- If the GPU is unsupported, Ollama may fall back to CPU.
+
+### Laptop has only 8GB RAM
+
+Use `qwen2.5:1.5b` first. If it runs reliably, try `qwen2.5:3b`. Avoid `qwen2.5:7b` unless the system remains stable.
+
+### Use a smaller model
+
+The model is configured in `ai/ollama_client.py`:
+
+```python
+'model': 'qwen2.5:7b',
+```
+
+For weaker hardware, change it to:
+
+```python
+'model': 'qwen2.5:1.5b',
+```
+
+or:
+
+```python
+'model': 'qwen2.5:3b',
+```
+
 ### AI refusal or weak output
 
-Use `qwen2.5:7b` and keep prompts focused on inventory analysis of static text data.
+Use the largest model your laptop can run reliably and keep prompts focused on inventory analysis of static text data. On low-resource laptops, stable smaller models are better than a larger model that crashes.
 
 ## Disclaimer
 
