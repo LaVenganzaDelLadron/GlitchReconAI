@@ -9,7 +9,7 @@ def generate_response(prompt: str, dashboard=None) -> str:
         json={
             'model': 'qwen2.5:7b',
             'prompt': prompt,
-            'stream': True, # or False if you want to receive the response in one go
+            'stream': False, # or False if you want to receive the response in one go
             }
         )
     ai_response = response.json()['response']

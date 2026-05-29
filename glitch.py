@@ -1,11 +1,8 @@
-from core.dashboard import Dashboard, set_dashboard
-from view import start as view_start
+from view.dashboard_app import GlitchReconApp
 
 
 def main() -> None:
-    set_dashboard(Dashboard())
-    view_start.banner()
-    view_start.menu()
+    GlitchReconApp().run()
 
 
 if __name__ == "__main__":

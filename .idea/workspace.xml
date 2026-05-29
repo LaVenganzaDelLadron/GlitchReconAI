@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2776e0da-be81-4604-ab2e-48583ebce21b" name="Changes" comment="adding a file">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ai/ollama_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai/ollama_client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/agent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/dashboard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-    </list>
+    <list default="true" id="2776e0da-be81-4604-ab2e-48583ebce21b" name="Changes" comment="adding a file" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -148,7 +141,7 @@
       <workItem from="1779900712029" duration="3260000" />
       <workItem from="1779994993747" duration="121000" />
       <workItem from="1779998323333" duration="120000" />
-      <workItem from="1780077755902" duration="632000" />
+      <workItem from="1780077755902" duration="845000" />
     </task>
     <task id="LOCAL-00001" summary="adding a file">
       <option name="closed" value="true" />
