@@ -1,4 +1,4 @@
-from core.agent import katana_agent, subfinder_agent
+from core.agent import katana_agent, subfinder_agent, waybackurls_agent
 
 
 def start_recon():
@@ -6,15 +6,18 @@ def start_recon():
 
     print("[1] Subfinder")
     print("[2] Katana")
+    print("[3] Waybackurls")
 
-    choice = input("Enter choice (1/2): ").strip()
+    choice = input("Enter choice (1/2/3): ").strip()
 
     if choice == "1":
         start_subfinder()
     elif choice == "2":
         start_katana()
+    elif choice == "3":
+        start_waybackurls()
     else:
-        print("Invalid choice. Please select 1 or 2.")
+        print("Invalid choice. Please select 1, 2, or 3.")
 
 
 def start_subfinder():
@@ -48,3 +51,10 @@ def start_katana():
 
     target = input("[+] Enter authorized target URL/domain: ").strip()
     katana_agent(target)
+
+
+def start_waybackurls():
+    print("\n=== WAYBACKURLS MODULE ===\n")
+
+    target = input("[+] Enter authorized target URL/domain: ").strip()
+    waybackurls_agent(target)
