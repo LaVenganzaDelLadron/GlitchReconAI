@@ -1,2 +1,4 @@
+# Python packages used by GlitchReconAI.
+# External recon binaries are installed separately; see README.md.
 requests
 rich

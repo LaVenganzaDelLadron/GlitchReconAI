@@ -4,6 +4,7 @@ from typing import List, Optional
 from rich.align import Align
 from rich.console import Console
 from rich.layout import Layout
+from rich.live import Live
 from rich.panel import Panel
 from rich.text import Text
 
@@ -21,6 +22,37 @@ class Dashboard:
         self.title = title
         self.logs: List[str] = []
         self.last_ai_output = "Waiting for AI analysis..."
+        self.live = None
+        self.is_running = False
+
+    def start(self) -> None:
+        """
+        Start the persistent live dashboard region.
+        """
+        if self.is_running:
+            return
+
+        self.live = Live(
+            self._build_layout(),
+            console=self.console,
+            refresh_per_second=8,
+            screen=False,
+            vertical_overflow="visible",
+        )
+        self.live.start()
+        self.is_running = True
+
+    def stop(self) -> None:
+        """
+        Stop the persistent live dashboard region and leave the final view visible.
+        """
+        if not self.is_running or self.live is None:
+            return
+
+        self.live.update(self._build_layout())
+        self.live.stop()
+        self.live = None
+        self.is_running = False
 
     def log(self, message: str) -> None:
         """
@@ -29,18 +61,29 @@ class Dashboard:
         timestamp = datetime.now().strftime("%H:%M:%S")
         line = f"[{timestamp}] {message}"
         self.logs.append(line)
-        self.render()
+        self._refresh()
 
     def ai_output(self, message: str) -> None:
         """
         Store Ollama analysis in the AI panel and refresh the dashboard.
         """
         self.last_ai_output = (message or "No AI output.").strip()
-        self.render()
+        self._refresh()
 
-    def render(self) -> None:
+    def _refresh(self) -> None:
         """
-        Render the full automatic split dashboard.
+        Update the existing live dashboard, or print once as a fallback.
+        """
+        layout = self._build_layout()
+
+        if self.is_running and self.live is not None:
+            self.live.update(layout)
+        else:
+            self.console.print(layout)
+
+    def _build_layout(self) -> Layout:
+        """
+        Build the full automatic split dashboard.
         """
         layout = Layout()
         layout.split_column(
@@ -70,8 +113,7 @@ class Dashboard:
             )
         )
 
-        self.console.clear()
-        self.console.print(layout)
+        return layout
 
     def _build_log_text(self) -> Text:
         recent_logs = self.logs[-18:]

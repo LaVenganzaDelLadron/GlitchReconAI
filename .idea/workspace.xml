@@ -6,8 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="2776e0da-be81-4604-ab2e-48583ebce21b" name="Changes" comment="adding a file">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ai/ollama_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/ai/ollama_client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/recon/subfinder.py" beforeDir="false" afterPath="$PROJECT_DIR$/tools/recon/subfinder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/agent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/dashboard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,23 +41,23 @@
 }</component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0000000384434464" />
-      <entry key="MS500" value="1.0583528849797295" />
-      <entry key="S2" value="2.0838609730582087" />
-      <entry key="S5" value="2.990483944365755" />
-      <entry key="S10" value="3.442409042887395" />
-      <entry key="S30" value="3.800941541984309" />
-      <entry key="S60" value="3.898800958643438" />
-      <entry key="M2" value="3.962370638777277" />
-      <entry key="M5" value="4.367632792527648" />
-      <entry key="M10" value="5.590452124615814" />
-      <entry key="M15" value="6.788863524387772" />
-      <entry key="M30" value="9.143918843152054" />
-      <entry key="H1" value="11.125544990613161" />
-      <entry key="H2" value="12.427748366740516" />
-      <entry key="H4" value="13.176625102409371" />
-      <entry key="D1" value="13.857269922381345" />
-      <entry key="W1" value="13.97947077582804" />
+      <entry key="MS100" value="1.000777046229455" />
+      <entry key="MS500" value="1.2822857957115463" />
+      <entry key="S2" value="2.1556648466698483" />
+      <entry key="S5" value="2.59740315737745" />
+      <entry key="S10" value="2.7857848819296986" />
+      <entry key="S30" value="2.926522422013921" />
+      <entry key="S60" value="3.039174139735399" />
+      <entry key="M2" value="3.658195873913484" />
+      <entry key="M5" value="5.6543339437705455" />
+      <entry key="M10" value="7.897150453309199" />
+      <entry key="M15" value="9.559095906783206" />
+      <entry key="M30" value="12.62383458508344" />
+      <entry key="H1" value="15.196369100315543" />
+      <entry key="H2" value="16.90735220992145" />
+      <entry key="H4" value="17.900316067641278" />
+      <entry key="D1" value="18.808770531652858" />
+      <entry key="W1" value="18.972479398515222" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -76,23 +79,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9659363663002066" />
-      <entry key="MS500" value="1.05108700186902" />
-      <entry key="S2" value="2.0803999010668632" />
-      <entry key="S5" value="2.9885101491289676" />
-      <entry key="S10" value="3.441274579013178" />
-      <entry key="S30" value="3.800524284671925" />
-      <entry key="S60" value="3.8985857856368114" />
-      <entry key="M2" value="3.962187422071414" />
-      <entry key="M5" value="4.367045341027179" />
-      <entry key="M10" value="5.589696087533098" />
-      <entry key="M15" value="6.788154273621276" />
-      <entry key="M30" value="9.143407004341299" />
-      <entry key="H1" value="11.12523314731478" />
-      <entry key="H2" value="12.427575452165465" />
-      <entry key="H4" value="13.176533936030545" />
-      <entry key="D1" value="13.857254030019654" />
-      <entry key="W1" value="13.9794684877889" />
+      <entry key="MS100" value="0.8299376274638609" />
+      <entry key="MS500" value="1.2239351910836394" />
+      <entry key="S2" value="2.10649754725618" />
+      <entry key="S5" value="2.5688410047376746" />
+      <entry key="S10" value="2.7694930040629293" />
+      <entry key="S30" value="2.9205801749065405" />
+      <entry key="S60" value="3.0360386253326803" />
+      <entry key="M2" value="3.6562108083092277" />
+      <entry key="M5" value="5.65283039915393" />
+      <entry key="M10" value="7.89585578051008" />
+      <entry key="M15" value="9.557975703298771" />
+      <entry key="M30" value="12.623066219982361" />
+      <entry key="H1" value="15.195907498186356" />
+      <entry key="H2" value="16.90709732236707" />
+      <entry key="H4" value="17.900181866563177" />
+      <entry key="D1" value="18.8087471555088" />
+      <entry key="W1" value="18.972476033362664" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -107,27 +110,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "master",
-    "junie.onboarding.icon.badge.shown": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -145,6 +148,7 @@
       <workItem from="1779900712029" duration="3260000" />
       <workItem from="1779994993747" duration="121000" />
       <workItem from="1779998323333" duration="120000" />
+      <workItem from="1780077755902" duration="632000" />
     </task>
     <task id="LOCAL-00001" summary="adding a file">
       <option name="closed" value="true" />
