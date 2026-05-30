@@ -1,0 +1,27 @@
+# Local environment / secrets
+.env
+.env.*
+!.env.example
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE settings
+.idea/
+
+# Runtime output
+logs/*.log
+sessions/*.json
+
+# Local/generated contents
+cache/*
+!cache/__init__.py
+reports/*
+!reports/__init__.py
