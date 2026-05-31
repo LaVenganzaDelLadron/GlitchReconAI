@@ -1,198 +1,64 @@
+from pathlib import Path
+
+
+PROMPT_DIR = Path(__file__).resolve().parent.parent / "prompts"
+
+PROMPT_FILES = {
+    "subfinder": PROMPT_DIR / "recon_prompts" / "subfinder_prompt.txt",
+    "assetfinder": PROMPT_DIR / "recon_prompts" / "assetfinder_prompt.txt",
+    "httpx": PROMPT_DIR / "recon_prompts" / "httpx_prompt.txt",
+    "katana": PROMPT_DIR / "recon_prompts" / "katana_prompt.txt",
+    "gau": PROMPT_DIR / "recon_prompts" / "gau_prompt.txt",
+    "waybackurls": PROMPT_DIR / "recon_prompts" / "waybackurls_prompt.txt",
+    "nikto": PROMPT_DIR / "scan_prompts" / "nikto_prompt.txt",
+    "ffuf": PROMPT_DIR / "scan_prompts" / "ffuf_prompt.txt",
+}
+
+
+def build_prompt(tool_name: str, data: str) -> str:
+    template_path = PROMPT_FILES.get(tool_name)
+
+    if template_path is None:
+        raise ValueError(f"Unsupported prompt tool: {tool_name}")
+
+    try:
+        template = template_path.read_text(encoding="utf-8")
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(f"Prompt file not found: {template_path}") from exc
+
+    if "{data}" not in template:
+        raise ValueError(f"Prompt file must include {{data}} placeholder: {template_path}")
+
+    return template.format(data=data)
+
 
 def build_subfinder_prompt(data: str) -> str:
-    return f"""
-    You are an offline cybersecurity data parser.
+    return build_prompt("subfinder", data)
 
-    You are analyzing pre-collected reconnaissance output.
-    Do NOT assume exploitation or vulnerabilities.
 
-    DATA:
-    {data}
+def build_assetfinder_prompt(data: str) -> str:
+    return build_prompt("assetfinder", data)
 
-    TASK:
-    1. Summary
-    2. Notable patterns
-    3. Suspicious naming patterns
-    4. Possible attack surface indicators (theoretical only)
-    5. Possible service or technology hints
-    6. Priority list
 
-    Rules:
-    - Be cautious
-    - No exploitation instructions
-    - No false vulnerability claims
-    """
+def build_httpx_prompt(data: str) -> str:
+    return build_prompt("httpx", data)
 
 
 def build_katana_prompt(data: str) -> str:
-    return f"""
-    You are an offline cybersecurity reconnaissance analyst.
+    return build_prompt("katana", data)
 
-    You are analyzing pre-collected Katana web crawler output.
-    This data is for authorized passive reconnaissance only.
-    Do NOT provide exploitation steps, payloads, vulnerability confirmation, or attack instructions.
-
-    DATA:
-    {data}
-
-    TASK:
-    1. Summary of discovered web surface
-    2. Notable URL and endpoint patterns
-    3. JavaScript files worth reviewing manually
-    4. API-looking paths and possible application areas
-    5. Interesting paths such as login, admin, upload, or graphql
-    6. Safe follow-up review priorities
-
-    Rules:
-    - Be cautious
-    - Treat findings as leads, not confirmed vulnerabilities
-    - Suggest only passive review and inventory actions
-    - Do not include exploit commands or payloads
-    """
-
-def build_waybackurls_prompt(data: str) -> str:
-    return f"""
-    You are an offline cybersecurity reconnaissance analyst.
-
-    You are analyzing pre-collected waybackurls output.
-    This data is for authorized passive reconnaissance only.
-    Do NOT provide exploitation steps, payloads, vulnerability confirmation, or attack instructions.
-
-    DATA:
-    {data}
-
-    TASK:
-    1. Summary of discovered web surface
-    2. Notable URL and endpoint patterns
-    3. JavaScript files worth reviewing manually
-    4. API-looking paths and possible application areas
-    5. Interesting paths such as login, admin, upload, or graphql
-    6. Safe follow-up review priorities
-
-    Rules:
-    - Be cautious
-    - Treat findings as leads, not confirmed vulnerabilities
-    - Suggest only passive review and inventory actions
-    - Do not include exploit commands or payloads
-    """
-
-def build_httpx_prompt(data: str) -> str:
-    return f"""
-    You are an offline cybersecurity reconnaissance analyst.
-    
-    You are analyzing pre-collected httpx output.
-    This data is for authorized passive reconnaissance only.
-    Do NOT provide exploitation steps, payloads, vulnerability confirmation, or attack instructions.
-
-    DATA:
-    {data}
-
-    TASK:
-    1. Summary of discovered web surface
-    2. Notable URL and endpoint patterns
-    3. JavaScript files worth reviewing manually
-    4. API-looking paths and possible application areas
-    5. Interesting paths such as login, admin, upload, or graphql
-    6. Safe follow-up review priorities
-
-    Rules:
-    - Be cautious
-    - Treat findings as leads, not confirmed vulnerabilities
-    - Suggest only passive review and inventory actions
-    - Do not include exploit commands or payloads
-    """
 
 def build_gau_prompt(data: str) -> str:
-    return f"""
-    You are an offline cybersecurity reconnaissance analyst.
-    You are analyzing pre-collected gau output.
-    This data is for authorized passive reconnaissance only.
-    Do NOT provide exploitation steps, payloads, vulnerability confirmation, or attack instructions.
-    DATA:
-    {data}
+    return build_prompt("gau", data)
 
-    TASK:
-    1. Summary of discovered web surface
-    2. Notable URL and endpoint patterns
-    3. JavaScript files worth reviewing manually
-    4. API-looking paths and possible application areas
-    5. Interesting paths such as login, admin, upload, or graphql
-    6. Safe follow-up review priorities 
-    Rules:
-    - Be cautious
-    - Treat findings as leads, not confirmed vulnerabilities
-    - Suggest only passive review and inventory actions
-    - Do not include exploit commands or payloads
-    """
 
-def build_assetfinder_prompt(data: str) -> str:
-    return f"""
-    You are an offline cybersecurity reconnaissance analyst.
+def build_waybackurls_prompt(data: str) -> str:
+    return build_prompt("waybackurls", data)
 
-    You are analyzing pre-collected assetfinder output.
-    This data is for authorized passive reconnaissance only.
-    Do NOT provide exploitation steps, payloads, vulnerability confirmation, or attack instructions.
-
-    DATA:
-    {data}
-
-    TASK:
-    1. Summary of discovered subdomains
-    2. Notable patterns in subdomain naming
-    3. Possible service or technology hints from subdomains
-    4. Subdomains that may indicate interesting attack surface (theoretical only)
-    5. Safe follow-up review priorities
-
-    Rules:
-    - Be cautious
-    - Treat findings as leads, not confirmed vulnerabilities
-    - Suggest only passive review and inventory actions
-    - Do not include exploit commands or payloads
-    """
 
 def build_nikto_prompt(data: str) -> str:
-    return f"""
-    You are an offline cybersecurity reconnaissance analyst.
+    return build_prompt("nikto", data)
 
-    You are analyzing pre-collected nikto output.
-    This data is for authorized passive reconnaissance only.
-    Do NOT provide exploitation steps, payloads, vulnerability confirmation, or attack instructions.
-
-    DATA:
-    {data}
-
-    TASK:
-    1. Summary of discovered web server information
-    2. Notable findings and potential misconfigurations
-    3. Possible service or technology hints from server responses
-    4. Findings that may indicate interesting attack surface (theoretical only)
-    5. Safe follow-up review priorities
-
-    Rules:
-    - Be cautious
-    - Treat findings as leads, not confirmed vulnerabilities
-    - Suggest only passive review and inventory actions
-    - Do not include exploit commands or payloads
-    """
 
 def build_ffuf_prompt(data: str) -> str:
-    return f"""
-    You are an offline cybersecurity reconnaissance analyst.
-    You are analyzing pre-collected ffuf output.
-    This data is for authorized passive reconnaissance only.
-    Do NOT provide exploitation steps, payloads, vulnerability confirmation, or attack instructions.
-    DATA:
-    {data}
-
-    TASK:
-    1. Summary of discovered web endpoints
-    2. Notable patterns in endpoint naming
-    3. Possible service or technology hints from endpoints
-    4. Endpoints that may indicate interesting attack surface (theoretical only)
-    5. Safe follow-up review priorities
-    Rules:
-    - Be cautious
-    - Treat findings as leads, not confirmed vulnerabilities
-    - Suggest only passive review and inventory actions
-    - Do not include exploit commands or payloads
-    """
+    return build_prompt("ffuf", data)
