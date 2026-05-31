@@ -11,11 +11,12 @@ from ai.analyzer import (
     analyze_katana_output,
     analyze_subfinder_output,
     analyze_waybackurls_output,
+    analyze_nikto_output,
 )
 from core.dashboard import get_dashboard
 from core.executor import run_tool
 from core.logger import log_error, log_info, log_warning
-from core.parser import parse_gau, parse_httpx, parse_katana, parse_subdomains
+from core.parser import parse_gau, parse_httpx, parse_katana, parse_subdomains, parse_nikto
 from core.planner import create_plan
 from core.reasoning import generate_reasoning
 from core.session import save_session
@@ -93,6 +94,14 @@ def gau_agent(target: str, dashboard: Any = None) -> None:
         dashboard=dashboard,
     )
 
+def nikto_agent(target: str, dashboard: Any = None) -> None:
+    _run_recon_workflow(
+        tool_name="nikto",
+        target=target,
+        parser=parse_nikto,
+        analyzer=analyze_nikto_output,
+        dashboard=dashboard,
+    )
 
 def _run_recon_workflow(
     *,

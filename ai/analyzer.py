@@ -5,7 +5,8 @@ from ai.prompt_engine import (
     build_subfinder_prompt, 
     build_waybackurls_prompt, 
     build_httpx_prompt, 
-    build_gau_prompt
+    build_gau_prompt,
+    build_nikto_prompt,
 )
 
 def analyze_subfinder_output(subdomains: str, dashboard=None) -> str:
@@ -60,5 +61,13 @@ def analyze_assetfinder_output(data: str, dashboard=None) -> str:
     """
     
     prompt = build_assetfinder_prompt(data)
+    analysis = generate_response(prompt, dashboard=dashboard)
+    return analysis
+
+def analyze_nikto_output(data: str, dashboard=None) -> str:
+    """
+        Analyze structured nikto crawl output with local AI.
+    """    
+    prompt = build_nikto_prompt(data)
     analysis = generate_response(prompt, dashboard=dashboard)
     return analysis

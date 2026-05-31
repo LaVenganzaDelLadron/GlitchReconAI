@@ -16,6 +16,7 @@ from core.agent import (
     katana_agent,
     subfinder_agent,
     waybackurls_agent,
+    nikto_agent,
 )
 
 
@@ -38,7 +39,7 @@ class ToolEntry:
 MAIN_MENU = [
     MenuEntry("recon", "Reconnaissance", "Passive discovery and crawling"),
     MenuEntry("intel", "Intelligence", "Not wired yet"),
-    MenuEntry("scan", "Scanning", "Not wired yet"),
+    MenuEntry("scan", "Scanning", "Web vulnerability scanning"),
     MenuEntry("web", "Web Testing", "Not wired yet"),
 ]
 
@@ -91,6 +92,17 @@ RECON_TOOLS = [
         gau_agent,
     ),
 ]
+SCAN_TOOLS = [
+    ToolEntry(
+        "nikto",
+        "Nikto",
+        "Running Nikto",
+        "Target URL/domain",
+        nikto_agent,
+    ),
+]
+
+
 
 
 class TargetInputScreen(ModalScreen[str | None]):
@@ -350,7 +362,7 @@ class GlitchReconApp(App[None]):
         self.add_log("[+] Dashboard ready.")
 
     def action_go_back(self) -> None:
-        if self.current_menu == "recon":
+        if self.current_menu in {"recon", "scan"}:
             self._set_menu("main")
             self.set_task("Idle")
             self.set_status("Ready")
@@ -362,6 +374,12 @@ class GlitchReconApp(App[None]):
             if selected_key == "recon":
                 self._set_menu("recon")
                 self.set_task("Reconnaissance")
+                self.set_status("Select a tool")
+                return
+            
+            if selected_key == "scan":
+                self._set_menu("scan")
+                self.set_task("Scanning")
                 self.set_status("Select a tool")
                 return
 
@@ -446,10 +464,24 @@ class GlitchReconApp(App[None]):
         menu_list = self.query_one("#menu-list", ListView)
         menu_list.clear()
 
-        entries = MAIN_MENU if menu_name == "main" else [
-            MenuEntry(tool.key, tool.label, tool.input_label)
-            for tool in RECON_TOOLS
-        ]
+        if menu_name == "main":
+            entries = MAIN_MENU
+            title = "MENU"
+        elif menu_name == "recon":
+            entries = [
+                MenuEntry(tool.key, tool.label, tool.input_label)
+                for tool in RECON_TOOLS
+            ]
+            title = "RECONNAISSANCE"
+        elif menu_name == "scan":
+            entries = [
+                MenuEntry(tool.key, tool.label, tool.input_label)
+                for tool in SCAN_TOOLS
+            ]
+            title = "SCANNING"
+        else:
+            entries = []
+            title = menu_name.upper()
 
         for entry in entries:
             label = entry.label
@@ -457,9 +489,7 @@ class GlitchReconApp(App[None]):
                 label = f"{entry.label}\n[dim]{entry.description}[/dim]"
             menu_list.append(ListItem(Label(label), id=entry.key))
 
-        self.query_one("#menu-title", Label).update(
-            "MENU" if menu_name == "main" else "RECONNAISSANCE"
-        )
+        self.query_one("#menu-title", Label).update(title)
         menu_list.index = 0
         menu_list.focus()
 
@@ -473,9 +503,12 @@ class GlitchReconApp(App[None]):
         self.query_one("#status-header", Static).update(header)
 
     def _tool_by_key(self, key: str) -> ToolEntry | None:
-        for tool in RECON_TOOLS:
+        tools = RECON_TOOLS if self.current_menu == "recon" else SCAN_TOOLS
+
+        for tool in tools:
             if tool.key == key:
                 return tool
+
         return None
 
     def _main_label(self, key: str) -> str:
