@@ -14,11 +14,12 @@ from ai.analyzer import (
     analyze_subfinder_output,
     analyze_waybackurls_output,
     analyze_nikto_output,
+    analyze_nmap_output,
 )
 from core.dashboard import get_dashboard
 from core.executor import run_tool
 from core.logger import log_error, log_info, log_warning
-from core.parser import parse_gau, parse_httpx, parse_katana, parse_subdomains, parse_nikto, parse_ffuf
+from core.parser import parse_gau, parse_httpx, parse_katana, parse_subdomains, parse_nikto, parse_ffuf, parse_nmap
 from core.planner import create_plan
 from core.reasoning import generate_reasoning
 from core.session import save_session
@@ -129,6 +130,15 @@ def nuclei_agent(target: str, templates: str = "", dashboard: Any = None) -> Non
         },
     )
 
+def nmap_agent(target: str, dashboard: Any = None) -> None:
+    _run_recon_workflow(
+        tool_name="nmap",
+        target=target,
+        parser=parse_nmap,
+        analyzer=analyze_nmap_output,
+        dashboard=dashboard,
+    )
+
 def _run_recon_workflow(
     *,
     tool_name: str,
@@ -150,7 +160,7 @@ def _run_recon_workflow(
 
     try:
         _log(dashboard, f"[+] Running {tool_label} for {clean_target}...")
-        raw_output = run_tool(tool_name, clean_target, tool_options)
+        raw_output = run_tool(tool_name, clean_target, options=tool_options)
 
         if _is_error(raw_output):
             _log(dashboard, raw_output, level="error")

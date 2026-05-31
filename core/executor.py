@@ -18,6 +18,7 @@ SUPPORTED_TOOLS = {
     "nikto",
     "ffuf",
     "nuclei",
+    "nmap",
 }
 
 FFUF_DEFAULT_WORDLISTS = (
@@ -91,11 +92,16 @@ def run_command(command: list[str], timeout: int = DEFAULT_TIMEOUT_SECONDS) -> s
     return stdout
 
 
-def run_tool(tool_name: str, *args: Any) -> str:
+def run_tool(
+    tool_name: str,
+    *args: Any,
+    options: dict[str, Any] | None = None,
+    **kwargs: Any,
+) -> str:
     """
     Build and run a supported recon tool command.
 
-    Supported tools: subfinder, assetfinder, httpx, gau, waybackurls, katana, nikto, ffuf.
+    Supported tools: subfinder, assetfinder, httpx, gau, waybackurls, katana, nikto, ffuf, nuclei, nmap.
     """
     normalized_name = _normalize_tool_name(tool_name)
     if normalized_name not in SUPPORTED_TOOLS:
@@ -104,7 +110,16 @@ def run_tool(tool_name: str, *args: Any) -> str:
         return message
 
     try:
-        command, timeout = _build_tool_command(normalized_name, args)
+        positional_args, tool_options = _normalize_tool_arguments(
+            args,
+            options=options,
+            keyword_options=kwargs,
+        )
+        command, timeout = _build_tool_command(
+            normalized_name,
+            positional_args,
+            tool_options,
+        )
     except ValueError as exc:
         message = f"[ERROR] {exc}"
         _log_error(message)
@@ -120,7 +135,7 @@ def run_parallel(tasks: Iterable[Any]) -> list[str]:
     Supported task forms:
     - callable
     - tuple/list: (callable, arg1, arg2, ...)
-    - dict with {"tool": "subfinder", "args": ["example.com"]}
+    - dict with {"tool": "subfinder", "args": ["example.com"], "options": {...}}
     - dict with {"command": ["python", "--version"], "timeout": 10}
     """
     task_list = list(tasks)
@@ -148,9 +163,12 @@ def run_parallel(tasks: Iterable[Any]) -> list[str]:
     return results
 
 
-def _build_tool_command(tool_name: str, args: Sequence[Any]) -> tuple[list[str], int]:
-    options = _extract_options(args)
-    positional_args = _extract_positional_args(args)
+def _build_tool_command(
+    tool_name: str,
+    args: Sequence[Any],
+    options: dict[str, Any],
+) -> tuple[list[str], int]:
+    positional_args = tuple(args)
     timeout = _get_timeout(options)
 
 
@@ -227,6 +245,37 @@ def _build_tool_command(tool_name: str, args: Sequence[Any]) -> tuple[list[str],
         target = _require_arg(tool_name, positional_args, 0, "target")
         return ["nuclei", "-u", target], timeout
 
+    if tool_name == "nmap":
+        target = _require_arg(tool_name, positional_args, 0, "target")
+        ports = str(options.get("ports", "")).strip()
+        timing = _get_positive_int(options.get("timing", 4), "timing")
+        aggressive = bool(options.get("aggressive", False))
+
+        if timing > 5:
+            raise ValueError("nmap timing must be between 1 and 5.")
+
+        command = ["nmap"]
+
+        if aggressive:
+            command.append("-A")
+        else:
+            if bool(options.get("service", True)):
+                command.append("-sV")
+
+            if bool(options.get("scripts", True)):
+                command.append("-sC")
+
+            if bool(options.get("no_ping", True)):
+                command.append("-Pn")
+
+        command.append(f"-T{timing}")
+
+        if ports:
+            command.extend(["-p", ports])
+
+        command.append(target)
+        return command, timeout
+
     raise ValueError(f"Unsupported tool: {tool_name}")
 
 
@@ -243,10 +292,12 @@ def _execute_task(task: Any) -> str:
                 args = (args,)
             if not isinstance(args, Iterable):
                 args = (args,)
-            kwargs = task.get("kwargs", {})
-            if not isinstance(kwargs, dict):
-                raise ValueError("Task 'kwargs' must be a dictionary.")
-            return run_tool(str(task["tool"]), *tuple(args), kwargs)
+            options = _task_options(task)
+            return run_tool(
+                str(task["tool"]),
+                *(args if isinstance(args, tuple) else tuple(args)),
+                options=options,
+            )
 
         if "command" in task:
             command = task["command"]
@@ -270,16 +321,46 @@ def _execute_task(task: Any) -> str:
     raise ValueError(f"Unsupported task type: {type(task).__name__}")
 
 
-def _extract_options(args: Sequence[Any]) -> dict[str, Any]:
-    if args and isinstance(args[-1], dict):
-        return dict(args[-1])
-    return {}
+def _normalize_tool_arguments(
+    args: Sequence[Any],
+    *,
+    options: dict[str, Any] | None,
+    keyword_options: dict[str, Any],
+) -> tuple[tuple[Any, ...], dict[str, Any]]:
+    positional_args = tuple(args)
+    merged_options: dict[str, Any] = {}
+
+    if positional_args and isinstance(positional_args[-1], dict):
+        merged_options.update(positional_args[-1])
+        positional_args = positional_args[:-1]
+
+    if any(isinstance(arg, dict) for arg in positional_args):
+        raise ValueError("Tool positional args must not include option dictionaries.")
+
+    if options is not None:
+        if not isinstance(options, dict):
+            raise ValueError("Tool options must be a dictionary.")
+        merged_options.update(options)
+
+    merged_options.update(keyword_options)
+    return positional_args, merged_options
 
 
-def _extract_positional_args(args: Sequence[Any]) -> tuple[Any, ...]:
-    if args and isinstance(args[-1], dict):
-        return tuple(args[:-1])
-    return tuple(args)
+def _task_options(task: dict[str, Any]) -> dict[str, Any]:
+    options = task.get("options", {})
+    kwargs = task.get("kwargs", {})
+
+    if options is None:
+        options = {}
+    if kwargs is None:
+        kwargs = {}
+
+    if not isinstance(options, dict):
+        raise ValueError("Task 'options' must be a dictionary.")
+    if not isinstance(kwargs, dict):
+        raise ValueError("Task 'kwargs' must be a dictionary.")
+
+    return {**kwargs, **options}
 
 
 def _require_arg(

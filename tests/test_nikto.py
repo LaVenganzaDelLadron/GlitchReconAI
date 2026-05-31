@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from core.executor import run_command, run_tool
+from core.executor import run_command, run_parallel, run_tool
 from core.parser import parse_nikto
 from tools.scanning.nikto import NIKTO_TIMEOUT_SECONDS, run_nikto
 
@@ -13,13 +13,58 @@ def test_run_tool_rejects_empty_nikto_target():
 
 def test_run_tool_builds_safe_nikto_command():
     with patch("core.executor.run_command", return_value="ok") as run_command_mock:
-        result = run_tool("nikto", "https://example.com", {"timeout": 45})
+        result = run_tool("nikto", "https://example.com", options={"timeout": 45})
 
     assert result == "ok"
     run_command_mock.assert_called_once_with(
         ["nikto", "-h", "https://example.com"],
         timeout=45,
     )
+
+
+def test_run_tool_builds_nmap_with_clean_positional_args():
+    with patch("core.executor.run_command", return_value="ok") as run_command_mock:
+        result = run_tool("nmap", "192.168.1.1")
+
+    assert result == "ok"
+    run_command_mock.assert_called_once_with(
+        ["nmap", "-sV", "-sC", "-Pn", "-T4", "192.168.1.1"],
+        timeout=300,
+    )
+
+
+def test_run_tool_accepts_keyword_options_without_positional_injection():
+    with patch("core.executor.run_command", return_value="ok") as run_command_mock:
+        result = run_tool("nmap", "192.168.1.1", timing=3, ports="80,443")
+
+    assert result == "ok"
+    run_command_mock.assert_called_once_with(
+        ["nmap", "-sV", "-sC", "-Pn", "-T3", "-p", "80,443", "192.168.1.1"],
+        timeout=300,
+    )
+
+
+def test_run_parallel_tool_task_uses_options_schema():
+    task = {
+        "tool": "nmap",
+        "args": ["192.168.1.1"],
+        "options": {"timing": 2, "ports": "22"},
+    }
+
+    with patch("core.executor.run_command", return_value="ok") as run_command_mock:
+        result = run_parallel([task])
+
+    assert result == ["ok"]
+    run_command_mock.assert_called_once_with(
+        ["nmap", "-sV", "-sC", "-Pn", "-T2", "-p", "22", "192.168.1.1"],
+        timeout=300,
+    )
+
+
+def test_run_tool_rejects_dict_in_positional_args():
+    result = run_tool("nmap", {"target": "192.168.1.1"}, "192.168.1.2")
+
+    assert result == "[ERROR] Tool positional args must not include option dictionaries."
 
 
 def test_run_nikto_delegates_to_shared_executor():
@@ -30,7 +75,7 @@ def test_run_nikto_delegates_to_shared_executor():
     run_tool_mock.assert_called_once_with(
         "nikto",
         "https://example.com",
-        {"timeout": NIKTO_TIMEOUT_SECONDS},
+        options={"timeout": NIKTO_TIMEOUT_SECONDS},
     )
 
 

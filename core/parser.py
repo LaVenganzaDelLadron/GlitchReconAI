@@ -123,7 +123,18 @@ FFUF_PATTERN = re.compile(
     re.MULTILINE,
 )
 
-
+NMAP_HOST_PATTERN = re.compile(
+    r"^Nmap scan report for (?P<host>[^\s(]+)(?: \((?P<ip>[^)]+)\))?$"
+)
+NMAP_PORT_PATTERN = re.compile(
+    r"^(?P<port>\d+)\/(?P<protocol>\S+)\s+"
+    r"(?P<state>\S+)\s+"
+    r"(?P<service>\S+)"
+    r"(?:\s+(?P<version>.*))?$"
+)
+NMAP_SCRIPT_PATTERN = re.compile(
+    r"^\|_?\s*(?P<name>[^:]+):\s*(?P<output>.*)$"
+)
 
 
 
@@ -412,6 +423,96 @@ def parse_ffuf(raw: Any) -> dict[str, Any]:
             ),
         },
     }
+
+def parse_nmap(raw: Any) -> dict[str, Any]:
+    """
+    Parse standard Nmap text output into host, port, service, and script data.
+    """
+    hosts: list[dict[str, Any]] = []
+    current_host: dict[str, Any] | None = None
+    current_port: dict[str, Any] | None = None
+
+    for line in _iter_values(raw):
+        host_match = NMAP_HOST_PATTERN.match(line)
+        if host_match:
+            current_host = {
+                "host": host_match.group("host") or "",
+                "ip": host_match.group("ip") or host_match.group("host") or "",
+                "ports": [],
+                "scripts": [],
+                "raw": [],
+            }
+            hosts.append(current_host)
+            current_port = None
+            continue
+
+        if current_host is None:
+            continue
+
+        current_host["raw"].append(line)
+
+        port_match = NMAP_PORT_PATTERN.match(line)
+        if port_match and port_match.group("state").lower() == "open":
+            current_port = {
+                "port": int(port_match.group("port")),
+                "protocol": port_match.group("protocol"),
+                "state": port_match.group("state"),
+                "service": port_match.group("service"),
+                "version": (port_match.group("version") or "").strip(),
+                "scripts": [],
+            }
+            current_host["ports"].append(current_port)
+            continue
+
+        script_match = NMAP_SCRIPT_PATTERN.match(line)
+        if script_match:
+            script = {
+                "name": script_match.group("name").strip(),
+                "output": script_match.group("output").strip(),
+            }
+            current_host["scripts"].append(script)
+            if current_port is not None:
+                current_port["scripts"].append(script)
+
+    open_ports = [
+        {
+            "host": host["host"],
+            "ip": host["ip"],
+            **port,
+        }
+        for host in hosts
+        for port in host["ports"]
+    ]
+    services = _deduplicate(
+        port["service"]
+        for port in open_ports
+        if port.get("service")
+    )
+    scripts = [
+        {
+            "host": host["host"],
+            "ip": host["ip"],
+            **script,
+        }
+        for host in hosts
+        for script in host["scripts"]
+    ]
+
+    return {
+        "count": len(open_ports),
+        "hosts": hosts,
+        "open_ports": open_ports,
+        "services": services,
+        "scripts": scripts,
+        "statistics": {
+            "host_count": len(hosts),
+            "open_port_count": len(open_ports),
+            "service_count": len(services),
+            "script_count": len(scripts),
+        },
+    }
+
+
 
 def _classify_urls(urls: Iterable[str]) -> dict[str, list[str]]:
     result: dict[str, list[str]] = {

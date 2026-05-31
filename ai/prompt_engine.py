@@ -13,6 +13,7 @@ PROMPT_FILES = {
     "nikto": PROMPT_DIR / "scan_prompts" / "nikto_prompt.txt",
     "ffuf": PROMPT_DIR / "scan_prompts" / "ffuf_prompt.txt",
     "nuclei": PROMPT_DIR / "scan_prompts" / "nuclei_prompt.txt",
+    "nmap": PROMPT_DIR / "scan_prompts" / "nmap_prompt.txt",
 }
 
 
@@ -68,3 +69,6 @@ def build_ffuf_prompt(data: str) -> str:
 def build_nuclei_prompt(data: str) -> str:
     return build_prompt("nuclei", data)
 
+
+def build_nmap_prompt(data: str) -> str:
+    return build_prompt("nmap", data)

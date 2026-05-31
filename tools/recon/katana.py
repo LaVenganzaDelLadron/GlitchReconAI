@@ -4,7 +4,7 @@ def run_katana_advanced(target):
     raw = run_tool(
         "katana",
         target,
-        {
+        options={
             "depth": 5
         }
     )

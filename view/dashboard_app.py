@@ -20,6 +20,8 @@ from core.agent import (
     ffuf_agent,
     nuclei_agent,
 )
+from tools.scanning.nmap import run_nmap
+from tools.scanning.nuclei import run_nuclei
 
 
 @dataclass(frozen=True)
@@ -106,12 +108,24 @@ SCAN_TOOLS = [
         "ffuf",
         "FFUF",
         "Running FFUF",
-        "Target URL/domain",
+        "Target URL",
         ffuf_agent,
     ),
+    ToolEntry(
+        "nmap",
+        "Nmap",
+        "Running Nmap",
+        "Target IP address",
+        run_nmap,
+    ),
+    ToolEntry(
+        "nuclei",
+        "Nuclei",
+        "Running Nuclei",
+        "Target URL/domain",
+        run_nuclei,
+    ),
 ]
-
-
 
 
 class TargetInputScreen(ModalScreen[str | None]):

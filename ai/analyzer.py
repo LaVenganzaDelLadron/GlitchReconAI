@@ -2,6 +2,7 @@ from ai.ollama_client import generate_response
 from ai.prompt_engine import (
     build_assetfinder_prompt,
     build_katana_prompt,
+    build_nmap_prompt,
     build_nuclei_prompt,
     build_subfinder_prompt, 
     build_waybackurls_prompt, 
@@ -52,5 +53,10 @@ def analyze_ffuf_output(data: str, dashboard=None) -> str:
 
 def analyze_nuclei_output(data: str, dashboard=None) -> str:
     prompt = build_nuclei_prompt(data)
+    analysis = generate_response(prompt, dashboard=dashboard)
+    return analysis
+
+def analyze_nmap_output(data: str, dashboard=None) -> str:
+    prompt = build_nmap_prompt(data)
     analysis = generate_response(prompt, dashboard=dashboard)
     return analysis

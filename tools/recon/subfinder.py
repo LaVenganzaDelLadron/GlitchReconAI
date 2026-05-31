@@ -8,7 +8,7 @@ def run_subfinder(
     return run_tool(
         "subfinder",
         target,
-        {
+        options={
             "mode": mode,
             "use_all_sources": use_all_sources
         }
