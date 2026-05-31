@@ -60,6 +60,56 @@ ADMIN_KEYWORDS = (
 )
 HTTPX_STATUS_PATTERN = re.compile(r"\[(\d{3})\]")
 HTTPX_TITLE_PATTERN = re.compile(r"\[(?!\d{3}\])([^\]]+)\]")
+NIKTO_METADATA_PREFIXES = (
+    "target ip:",
+    "target hostname:",
+    "target port:",
+    "start time:",
+    "end time:",
+    "nikto",
+)
+NIKTO_HEADER_KEYWORDS = (
+    "header",
+    "x-frame-options",
+    "x-content-type-options",
+    "x-xss-protection",
+    "strict-transport-security",
+    "content-security-policy",
+    "server:",
+)
+NIKTO_DISCLOSURE_KEYWORDS = (
+    "outdated",
+    "version",
+    "server leaks",
+    "server banner",
+    "retrieved",
+    "disclosure",
+    "apache",
+    "nginx",
+    "iis",
+    "php",
+    "openssl",
+)
+NIKTO_EXPOSURE_KEYWORDS = (
+    "admin",
+    "administrator",
+    "login",
+    "auth",
+    "password",
+    "passwd",
+    "config",
+    "configuration",
+    "backup",
+    ".bak",
+    ".old",
+    ".env",
+    ".git",
+    "directory indexing",
+    "directory listing",
+    "robots.txt",
+    "phpinfo",
+    "test page",
+)
 
 
 def parse_subdomains(raw: Any) -> dict[str, Any]:
@@ -182,6 +232,64 @@ def parse_gau(raw: Any) -> dict[str, Any]:
     }
 
 
+def parse_nikto(raw: Any) -> dict[str, Any]:
+    """
+    Parse Nikto output into structured scanner findings.
+    """
+    lines = list(_iter_values(raw))
+    findings: list[str] = []
+    interesting_headers: list[str] = []
+    disclosure_hints: list[str] = []
+    exposure_findings: list[str] = []
+    target: dict[str, str] = {
+        "host": "",
+        "ip": "",
+        "port": "",
+    }
+
+    for line in lines:
+        cleaned = _clean_nikto_line(line)
+        if not cleaned:
+            continue
+
+        _update_nikto_target(target, cleaned)
+
+        if not _is_nikto_finding(cleaned):
+            continue
+
+        findings.append(cleaned)
+        lowered = cleaned.lower()
+
+        if any(keyword in lowered for keyword in NIKTO_HEADER_KEYWORDS):
+            interesting_headers.append(cleaned)
+
+        if any(keyword in lowered for keyword in NIKTO_DISCLOSURE_KEYWORDS):
+            disclosure_hints.append(cleaned)
+
+        if any(keyword in lowered for keyword in NIKTO_EXPOSURE_KEYWORDS):
+            exposure_findings.append(cleaned)
+
+    findings = _deduplicate(findings)
+    interesting_headers = _deduplicate(interesting_headers)
+    disclosure_hints = _deduplicate(disclosure_hints)
+    exposure_findings = _deduplicate(exposure_findings)
+
+    return {
+        "target": target,
+        "count": len(findings),
+        "findings": findings,
+        "interesting_headers": interesting_headers,
+        "outdated_or_disclosure_hints": disclosure_hints,
+        "exposure_findings": exposure_findings,
+        "statistics": {
+            "finding_count": len(findings),
+            "interesting_header_count": len(interesting_headers),
+            "outdated_or_disclosure_count": len(disclosure_hints),
+            "exposure_count": len(exposure_findings),
+        },
+    }
+
+
 def _classify_urls(urls: Iterable[str]) -> dict[str, list[str]]:
     result: dict[str, list[str]] = {
         "apis": [],
@@ -209,6 +317,34 @@ def _classify_urls(urls: Iterable[str]) -> dict[str, list[str]]:
         key: _deduplicate(values)
         for key, values in result.items()
     }
+
+
+def _clean_nikto_line(line: str) -> str:
+    cleaned = line.strip()
+    if cleaned.startswith("+"):
+        cleaned = cleaned[1:].strip()
+    elif cleaned.startswith("- "):
+        cleaned = cleaned[2:].strip()
+    return cleaned
+
+
+def _is_nikto_finding(line: str) -> bool:
+    lowered = line.lower()
+    if lowered.startswith(NIKTO_METADATA_PREFIXES):
+        return False
+
+    return bool(line and not set(line) <= {"-", "="})
+
+
+def _update_nikto_target(target: dict[str, str], line: str) -> None:
+    lowered = line.lower()
+
+    if lowered.startswith("target hostname:"):
+        target["host"] = line.split(":", 1)[1].strip()
+    elif lowered.startswith("target ip:"):
+        target["ip"] = line.split(":", 1)[1].strip()
+    elif lowered.startswith("target port:"):
+        target["port"] = line.split(":", 1)[1].strip()
 
 
 def _iter_values(raw: Any) -> Iterable[str]:

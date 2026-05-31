@@ -1,22 +1,5 @@
-import subprocess
-import shutil
+# httpx.py
+from core.executor import run_tool
 
-def run_httpx(targets_file: str) -> str:
-    """
-    Runs httpx and returns raw output for AI processing
-    """
-
-    if not shutil.which("httpx"):
-        return []
-
-    try:
-        result = subprocess.run(
-            ["httpx", targets_file],
-            capture_output=True,
-            text=True
-        )
-
-        return result.stdout
-
-    except Exception as e:
-        return []
+def run_httpx(target: str) -> str:
+    return run_tool("httpx", target)

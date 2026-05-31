@@ -15,6 +15,7 @@ SUPPORTED_TOOLS = {
     "gau",
     "waybackurls",
     "katana",
+    "nikto",
 }
 
 
@@ -87,7 +88,7 @@ def run_tool(tool_name: str, *args: Any) -> str:
     """
     Build and run a supported recon tool command.
 
-    Supported tools: subfinder, assetfinder, httpx, gau, waybackurls, katana.
+    Supported tools: subfinder, assetfinder, httpx, gau, waybackurls, katana, nikto.
     """
     normalized_name = _normalize_tool_name(tool_name)
     if normalized_name not in SUPPORTED_TOOLS:
@@ -194,6 +195,10 @@ def _build_tool_command(tool_name: str, args: Sequence[Any]) -> tuple[list[str],
             "-silent",
         ]
         return command, timeout
+
+    if tool_name == "nikto":
+        target = _require_arg(tool_name, positional_args, 0, "target")
+        return ["nikto", "-h", target], timeout
 
     raise ValueError(f"Unsupported tool: {tool_name}")
 
