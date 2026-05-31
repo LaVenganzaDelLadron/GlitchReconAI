@@ -18,6 +18,7 @@ from core.agent import (
     waybackurls_agent,
     nikto_agent,
     ffuf_agent,
+    nuclei_agent,
 )
 
 

@@ -17,6 +17,7 @@ SUPPORTED_TOOLS = {
     "katana",
     "nikto",
     "ffuf",
+    "nuclei",
 }
 
 FFUF_DEFAULT_WORDLISTS = (
@@ -152,6 +153,11 @@ def _build_tool_command(tool_name: str, args: Sequence[Any]) -> tuple[list[str],
     positional_args = _extract_positional_args(args)
     timeout = _get_timeout(options)
 
+
+    """
+        Note: This Section is for enumeration.
+    """
+
     if tool_name == "subfinder":
         target = _require_arg(tool_name, positional_args, 0, "target")
         mode = str(options.get("mode", "single")).lower()
@@ -202,6 +208,11 @@ def _build_tool_command(tool_name: str, args: Sequence[Any]) -> tuple[list[str],
         ]
         return command, timeout
 
+
+    """
+        Note: This Section is for scanning.
+    """
+
     if tool_name == "nikto":
         target = _require_arg(tool_name, positional_args, 0, "target")
         return ["nikto", "-h", target], timeout
@@ -211,6 +222,10 @@ def _build_tool_command(tool_name: str, args: Sequence[Any]) -> tuple[list[str],
         wordlist = _optional_arg(positional_args, 1) or _default_ffuf_wordlist()
         fuzz_url = target if "FUZZ" in target else target.rstrip("/") + "/FUZZ"
         return ["ffuf", "-u", fuzz_url, "-w", wordlist], timeout
+
+    if tool_name == "nuclei":
+        target = _require_arg(tool_name, positional_args, 0, "target")
+        return ["nuclei", "-u", target], timeout
 
     raise ValueError(f"Unsupported tool: {tool_name}")
 

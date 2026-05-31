@@ -12,6 +12,7 @@ PROMPT_FILES = {
     "waybackurls": PROMPT_DIR / "recon_prompts" / "waybackurls_prompt.txt",
     "nikto": PROMPT_DIR / "scan_prompts" / "nikto_prompt.txt",
     "ffuf": PROMPT_DIR / "scan_prompts" / "ffuf_prompt.txt",
+    "nuclei": PROMPT_DIR / "scan_prompts" / "nuclei_prompt.txt",
 }
 
 
@@ -62,3 +63,8 @@ def build_nikto_prompt(data: str) -> str:
 
 def build_ffuf_prompt(data: str) -> str:
     return build_prompt("ffuf", data)
+
+
+def build_nuclei_prompt(data: str) -> str:
+    return build_prompt("nuclei", data)
+

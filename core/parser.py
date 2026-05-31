@@ -110,6 +110,23 @@ NIKTO_EXPOSURE_KEYWORDS = (
     "phpinfo",
     "test page",
 )
+NUCLEI_SEVERITIES = (
+    "info",
+    "low",
+    "medium",
+    "high",
+    "critical",
+)
+
+FFUF_PATTERN = re.compile(
+    r"^(.*?)\s+\[Status:\s*(\d+),\s*Size:\s*(\d+),\s*Words:\s*(\d+),\s*Lines:\s*(\d+)",
+    re.MULTILINE,
+)
+
+
+
+
+
 
 
 def parse_subdomains(raw: Any) -> dict[str, Any]:
@@ -289,6 +306,112 @@ def parse_nikto(raw: Any) -> dict[str, Any]:
         },
     }
 
+def parse_nuclei(raw: Any) -> dict[str, Any]:
+    """
+    Parse Nuclei JSONL output into structured findings.
+    """
+
+    findings = []
+    severity_counts = {
+        "info": 0,
+        "low": 0,
+        "medium": 0,
+        "high": 0,
+        "critical": 0,
+    }
+
+    lines = _iter_values(raw)
+
+    for line in lines:
+        try:
+            item = json.loads(line)
+        except Exception:
+            continue
+
+        severity = (
+            item.get("info", {})
+            .get("severity", "info")
+            .lower()
+        )
+
+        if severity not in severity_counts:
+            severity = "info"
+
+        severity_counts[severity] += 1
+
+        findings.append(
+            {
+                "template_id": item.get("template-id", ""),
+                "name": item.get("info", {}).get("name", ""),
+                "severity": severity,
+                "host": item.get("host", ""),
+                "matched_at": item.get("matched-at", ""),
+                "description": item.get("info", {}).get(
+                    "description",
+                    ""
+                ),
+            }
+        )
+
+    return {
+        "count": len(findings),
+        "findings": findings,
+        "severity_counts": severity_counts,
+        "critical_findings": [
+            x for x in findings
+            if x["severity"] == "critical"
+        ],
+        "high_findings": [
+            x for x in findings
+            if x["severity"] == "high"
+        ],
+        "statistics": {
+            "total": len(findings),
+            **severity_counts,
+        },
+    }
+
+def parse_ffuf(raw: Any) -> dict[str, Any]:
+    """
+    Parse FFUF output into structured endpoint discoveries.
+    """
+
+    findings = []
+
+    for match in FFUF_PATTERN.finditer(str(raw)):
+        findings.append(
+            {
+                "path": match.group(1).strip(),
+                "status": int(match.group(2)),
+                "size": int(match.group(3)),
+                "words": int(match.group(4)),
+                "lines": int(match.group(5)),
+            }
+        )
+
+    interesting = [
+        f for f in findings
+        if f["status"] in {200, 401, 403}
+    ]
+
+    return {
+        "count": len(findings),
+        "findings": findings,
+        "interesting": interesting,
+        "statistics": {
+            "total": len(findings),
+            "interesting": len(interesting),
+            "status_200": len(
+                [x for x in findings if x["status"] == 200]
+            ),
+            "status_403": len(
+                [x for x in findings if x["status"] == 403]
+            ),
+            "status_401": len(
+                [x for x in findings if x["status"] == 401]
+            ),
+        },
+    }
 
 def _classify_urls(urls: Iterable[str]) -> dict[str, list[str]]:
     result: dict[str, list[str]] = {

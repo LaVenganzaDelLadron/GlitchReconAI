@@ -4,6 +4,27 @@ GlitchReconAI is a CLI reconnaissance automation tool for authorized security re
 
 This project is intended for analyzing collected reconnaissance output. It does not perform exploitation.
 
+## Purpose
+
+The purpose of GlitchReconAI is to help security learners and practitioners collect, organize, parse, and understand reconnaissance and scanning results from common cybersecurity tools. Instead of manually reading large raw outputs, the system converts tool results into structured data and sends them to a local Ollama AI model for safer summary, prioritization, and review suggestions.
+
+GlitchReconAI is designed for authorized security assessment, bug bounty reconnaissance, capstone demonstrations, and cybersecurity research workflows. It helps users identify interesting assets, URLs, APIs, JavaScript files, login/admin paths, exposed files, and scanner findings that may need manual review.
+
+This project does not perform exploitation, vulnerability confirmation, payload generation, or unauthorized attacks. AI output should be treated as guidance only, not proof of a vulnerability.
+
+## Who Can Use It
+
+GlitchReconAI can be used by:
+
+- **Cybersecurity students** who want to learn reconnaissance, scanning workflows, and AI-assisted analysis in a controlled environment.
+- **Information Technology capstone groups** building a practical cybersecurity automation and local AI analysis project.
+- **Ethical hackers** working only on systems they own or have explicit permission to assess.
+- **Bug bounty hunters** who need help organizing recon output, finding interesting endpoints, and prioritizing manual review.
+- **Cybersecurity researchers** who analyze web assets, exposed paths, service metadata, and historical URL data.
+- **Security teams** who want a local-first assistant for summarizing recon and scanner output without sending data to cloud AI services.
+
+Only use this tool against targets where you have legal authorization, such as your own systems, lab environments, approved client scopes, or valid bug bounty programs.
+
 ## Features
 
 - Interactive command-line menu.

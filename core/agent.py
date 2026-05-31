@@ -10,6 +10,7 @@ from ai.analyzer import (
     analyze_gau_output,
     analyze_httpx_output,
     analyze_katana_output,
+    analyze_nuclei_output,
     analyze_subfinder_output,
     analyze_waybackurls_output,
     analyze_nikto_output,
@@ -17,7 +18,7 @@ from ai.analyzer import (
 from core.dashboard import get_dashboard
 from core.executor import run_tool
 from core.logger import log_error, log_info, log_warning
-from core.parser import parse_gau, parse_httpx, parse_katana, parse_subdomains, parse_nikto
+from core.parser import parse_gau, parse_httpx, parse_katana, parse_subdomains, parse_nikto, parse_ffuf
 from core.planner import create_plan
 from core.reasoning import generate_reasoning
 from core.session import save_session
@@ -108,7 +109,7 @@ def ffuf_agent(target: str, wordlist: str = "", dashboard: Any = None) -> None:
     _run_recon_workflow(
         tool_name="ffuf",
         target=target,
-        parser=parse_nikto,  # For simplicity, we can reuse the nikto parser, but ideally we'd have a dedicated one.
+        parser=parse_ffuf,
         analyzer=analyze_ffuf_output,
         dashboard=dashboard,
         tool_options={
@@ -116,6 +117,17 @@ def ffuf_agent(target: str, wordlist: str = "", dashboard: Any = None) -> None:
         },
     )
 
+def nuclei_agent(target: str, templates: str = "", dashboard: Any = None) -> None:
+    _run_recon_workflow(
+        tool_name="nuclei",
+        target=target,
+        parser=parse_nikto,  # For simplicity, we can reuse the nikto parser, but ideally we'd have a dedicated one.
+        analyzer=analyze_nuclei_output,
+        dashboard=dashboard,
+        tool_options={
+            "templates": templates,
+        },
+    )
 
 def _run_recon_workflow(
     *,
@@ -131,7 +143,7 @@ def _run_recon_workflow(
     clean_target = _clean_target(target)
     tool_options = tool_options or {}
 
-    dashboard.start()
+    dashboard.start()   
     _set_target(dashboard, clean_target)
     _set_task(dashboard, f"Running {tool_label}")
     _set_status(dashboard, "Active")
