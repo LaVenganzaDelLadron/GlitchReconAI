@@ -174,3 +174,25 @@ def build_nikto_prompt(data: str) -> str:
     - Suggest only passive review and inventory actions
     - Do not include exploit commands or payloads
     """
+
+def build_ffuf_prompt(data: str) -> str:
+    return f"""
+    You are an offline cybersecurity reconnaissance analyst.
+    You are analyzing pre-collected ffuf output.
+    This data is for authorized passive reconnaissance only.
+    Do NOT provide exploitation steps, payloads, vulnerability confirmation, or attack instructions.
+    DATA:
+    {data}
+
+    TASK:
+    1. Summary of discovered web endpoints
+    2. Notable patterns in endpoint naming
+    3. Possible service or technology hints from endpoints
+    4. Endpoints that may indicate interesting attack surface (theoretical only)
+    5. Safe follow-up review priorities
+    Rules:
+    - Be cautious
+    - Treat findings as leads, not confirmed vulnerabilities
+    - Suggest only passive review and inventory actions
+    - Do not include exploit commands or payloads
+    """

@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from pathlib import Path
 import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from collections.abc import Iterable, Sequence
@@ -16,7 +16,13 @@ SUPPORTED_TOOLS = {
     "waybackurls",
     "katana",
     "nikto",
+    "ffuf",
 }
+
+FFUF_DEFAULT_WORDLISTS = (
+    "/usr/share/seclists/Discovery/Web-Content/common.txt",
+    "/usr/share/wordlists/rockyou.txt",
+)
 
 
 def run_command(command: list[str], timeout: int = DEFAULT_TIMEOUT_SECONDS) -> str:
@@ -88,7 +94,7 @@ def run_tool(tool_name: str, *args: Any) -> str:
     """
     Build and run a supported recon tool command.
 
-    Supported tools: subfinder, assetfinder, httpx, gau, waybackurls, katana, nikto.
+    Supported tools: subfinder, assetfinder, httpx, gau, waybackurls, katana, nikto, ffuf.
     """
     normalized_name = _normalize_tool_name(tool_name)
     if normalized_name not in SUPPORTED_TOOLS:
@@ -200,6 +206,12 @@ def _build_tool_command(tool_name: str, args: Sequence[Any]) -> tuple[list[str],
         target = _require_arg(tool_name, positional_args, 0, "target")
         return ["nikto", "-h", target], timeout
 
+    if tool_name == "ffuf":
+        target = _require_arg(tool_name, positional_args, 0, "target")
+        wordlist = _optional_arg(positional_args, 1) or _default_ffuf_wordlist()
+        fuzz_url = target if "FUZZ" in target else target.rstrip("/") + "/FUZZ"
+        return ["ffuf", "-u", fuzz_url, "-w", wordlist], timeout
+
     raise ValueError(f"Unsupported tool: {tool_name}")
 
 
@@ -271,6 +283,26 @@ def _require_arg(
 
     return value.strip()
 
+def _optional_arg(args: Sequence[Any], index: int) -> str:
+    try:
+        value = args[index]
+    except IndexError:
+        return ""
+
+    if not isinstance(value, str):
+        return ""
+
+    return value.strip()
+
+
+def _default_ffuf_wordlist() -> str:
+    for wordlist in FFUF_DEFAULT_WORDLISTS:
+        if Path(wordlist).is_file():
+            return wordlist
+
+    raise ValueError(
+        "ffuf requires a wordlist because no default wordlist was found."
+    )
 
 def _get_timeout(options: dict[str, Any]) -> int:
     return _get_positive_int(options.get("timeout", DEFAULT_TIMEOUT_SECONDS), "timeout")

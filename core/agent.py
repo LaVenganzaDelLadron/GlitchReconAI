@@ -6,6 +6,7 @@ from typing import Any
 
 from ai.analyzer import (
     analyze_assetfinder_output,
+    analyze_ffuf_output,
     analyze_gau_output,
     analyze_httpx_output,
     analyze_katana_output,
@@ -102,6 +103,19 @@ def nikto_agent(target: str, dashboard: Any = None) -> None:
         analyzer=analyze_nikto_output,
         dashboard=dashboard,
     )
+
+def ffuf_agent(target: str, wordlist: str = "", dashboard: Any = None) -> None:
+    _run_recon_workflow(
+        tool_name="ffuf",
+        target=target,
+        parser=parse_nikto,  # For simplicity, we can reuse the nikto parser, but ideally we'd have a dedicated one.
+        analyzer=analyze_ffuf_output,
+        dashboard=dashboard,
+        tool_options={
+            "wordlist": wordlist,
+        },
+    )
+
 
 def _run_recon_workflow(
     *,

@@ -71,3 +71,12 @@ def analyze_nikto_output(data: str, dashboard=None) -> str:
     prompt = build_nikto_prompt(data)
     analysis = generate_response(prompt, dashboard=dashboard)
     return analysis
+
+def analyze_ffuf_output(data: str, dashboard=None) -> str:
+    """
+        Analyze structured ffuf crawl output with local AI.
+    """    
+    # For simplicity, we can reuse the nikto prompt structure, but ideally we'd have a dedicated one.
+    prompt = build_nikto_prompt(data)  # You may want to create a specific prompt for ffuf.
+    analysis = generate_response(prompt, dashboard=dashboard)
+    return analysis

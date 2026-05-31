@@ -17,6 +17,7 @@ from core.agent import (
     subfinder_agent,
     waybackurls_agent,
     nikto_agent,
+    ffuf_agent,
 )
 
 
@@ -99,6 +100,13 @@ SCAN_TOOLS = [
         "Running Nikto",
         "Target URL/domain",
         nikto_agent,
+    ),
+    ToolEntry(
+        "ffuf",
+        "FFUF",
+        "Running FFUF",
+        "Target URL/domain",
+        ffuf_agent,
     ),
 ]
 
